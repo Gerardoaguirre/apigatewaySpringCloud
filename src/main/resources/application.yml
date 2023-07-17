@@ -15,4 +15,4 @@ spring:
         filters:
           - StripPrefix=2 #Segemtnos por los que está creado la ruta api(1) productos (2)
           
-#Aqui configuramos las rutas de nuestro apigeway, para posteriormente llamarlo en el application.properties
+#Aqui configuramos las rutas de nuestro apigeway, y ya no en el application properties
