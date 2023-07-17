@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: servicio-productos
+        uri: lb://servicio-productos #se pone lb para decir que queremos balanceo de carga
+        predicates:
+          - Path=/api/productos/**
+        filters:
+          - StripPrefix=2 #Segemtnos por los que está creado la ruta api(1) productos (2)
+      - id: servicio-items
+        uri: lb://servicio-items #se pone lb para decir que queremos balanceo de carga
+        predicates:
+          - Path=/api/items/**
+        filters:
+          - StripPrefix=2 #Segemtnos por los que está creado la ruta api(1) productos (2)
+          
+#Aqui configuramos las rutas de nuestro apigeway, para posteriormente llamarlo en el application.properties
