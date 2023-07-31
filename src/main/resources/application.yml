@@ -4,8 +4,13 @@ spring:
       routes:
       - id: servicio-productos
         uri: lb://servicio-productos #se pone lb para decir que queremos balanceo de carga
-        predicates:
-          - Path=/api/productos/**
+        predicates: #Los predicates son reglas que se deben cumplir para las peticiones //si las reglas no se cumplen devuelve al clienten un 404
+          - Path=/api/productos/** #a que endpoint vamos a aplicarle las reglas
+          #- Header= token, \d+  #el token debe ser numerico
+          #- Header=  Content-Type, application/json
+          #- Method=GET, POST
+         # - Query=color, verde #que en la url envie verde
+          #- Cookie=color, azul #cookie que deben enviar //checar siempre el cliente, ya que por mis otros filtros que cambia la cookie, se cambia. debe ser (color=azul; Path=/api/productos;)
         filters:
           - StripPrefix=2 #Segemtnos por los que está creado la ruta api(1) productos (2)
           - EjemploCookie= Hola mi mensaje perosnalizado, usuario, GerardoCOpalcua # manera (2) Y si lo queremos hacer de esta manera debemo configurar la clase, en vez de la otra forma
@@ -20,7 +25,7 @@ spring:
           #--------un forma de meter filtros ---------------------------------------------------------------------------
       - id: servicio-items
         uri: lb://servicio-items #se pone lb para decir que queremos balanceo de carga
-        predicates:
+        predicates: #Los predicates son reglas que se deben cumplir para las peticiones
           - Path=/api/items/** #a donde vamos a apuntar las peticiones
         filters:
           - StripPrefix=2 #Segemtnos por los que está creado la ruta api(1) productos (2)
@@ -32,3 +37,4 @@ spring:
 
 #lista de todos los filtros que podemos meter el gateway
 #https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/
+
