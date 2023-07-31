@@ -8,11 +8,27 @@ spring:
           - Path=/api/productos/**
         filters:
           - StripPrefix=2 #Segemtnos por los que está creado la ruta api(1) productos (2)
+          - EjemploCookie= Hola mi mensaje perosnalizado, usuario, GerardoCOpalcua # manera (2) Y si lo queremos hacer de esta manera debemo configurar la clase, en vez de la otra forma
+          #--------un forma de meter filtros  fmanera(1)---------------------------------------------------------------------------
+        #filters:
+         # - StripPrefix=2 #Segemtnos por los que está creado la ruta api(1) productos (2)
+          #- name: Ejemplo #nombre de la clase EjemploGatewayFilterFactory //subfijo  GatewayFilterFactory
+           # args:
+            #  mensaje: Hola mi mensaje personalizado #esto pinta en el log
+             # cookieNombre: usuario
+              #cookieValor:  GerardoCopalcua #//siempre sin espacios ni caracteres epeciales //esto se pinta en las cookies de respuesta de la petcion
+          #--------un forma de meter filtros ---------------------------------------------------------------------------
       - id: servicio-items
         uri: lb://servicio-items #se pone lb para decir que queremos balanceo de carga
         predicates:
-          - Path=/api/items/**
+          - Path=/api/items/** #a donde vamos a apuntar las peticiones
         filters:
           - StripPrefix=2 #Segemtnos por los que está creado la ruta api(1) productos (2)
-          
-#Aqui configuramos las rutas de nuestro apigeway, y ya no en el application properties
+          - AddRequestHeader=token-request, 123456 #para modificar el request de lo que le llega en el, y agregar 
+          - AddResponseHeader=token-response, 7890123
+          - SetResponseHeader=Content-Type, text/plain
+          - AddRequestParameter=nombre, Gerardo #para pasar parametros al request y se envian
+#Aqui configuramos las rutas de nuestro apigeway, y ya no en el application properties 
+
+#lista de todos los filtros que podemos meter el gateway
+#https://docs.spring.io/spring-cloud-gateway/docs/current/reference/html/

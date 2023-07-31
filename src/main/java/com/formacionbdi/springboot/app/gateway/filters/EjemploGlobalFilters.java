@@ -33,18 +33,17 @@ public class EjemploGlobalFilters implements GlobalFilter, Ordered{
 		return chain.filter(exchange).then(Mono.fromRunnable(()->{
 			logger.info("Ejecutando filtro post");
 			
-			Optional.ofNullable(exchange.getRequest().getHeaders().getFirst("token")).ifPresent(valor ->{//desimos que si no nulo tokenn le agregamos el token
+			Optional.ofNullable(exchange.getRequest().getHeaders().getFirst("token")).ifPresent(valor ->{//desimos que si no es nulo tokenn le agregamos el token
 				exchange.getResponse().getHeaders().add("token", valor);
 			}) ;
 			
 			exchange.getResponse().getCookies().add("color",ResponseCookie.from("color", "rojo").build());//squi decimos que vamos a devolver un objeto color rojo en la cookie del response de los header
-			exchange.getResponse().getHeaders().setContentType(MediaType.TEXT_PLAIN);//la rspeusta la vamos a devilver en texto plano
+			//exchange.getResponse().getHeaders().setContentType(MediaType.TEXT_PLAIN);//la rspeusta la vamos a devilver en texto plano
 		}));
 	}
 	@Override
 	public int getOrder() {
-		// TODO Auto-generated method stub
-		return -1;
+		return 1;
 	}
 
 }
