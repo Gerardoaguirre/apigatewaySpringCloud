@@ -1,3 +1,24 @@
+resilience4j:
+  circuitbreaker:
+    configs:
+      defecto:
+        sliding-window-size: 6
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 20s
+        permitted-number-of-calls-in-half-open-state: 4
+        slow-call-rate-threshold: 50
+        slow-call-duration-threshold: 2s
+    instances:
+      productos: #nombre de la instancia que se encuentra en el itemcontroller
+        base-config: defecto
+  timelimiter:
+    configs:
+      defecto:
+        timeout-duration: 2s
+    instances:
+      productos:
+        base-config: defecto
+
 spring:
   cloud:
     gateway:
@@ -12,6 +33,11 @@ spring:
          # - Query=color, verde #que en la url envie verde
           #- Cookie=color, azul #cookie que deben enviar //checar siempre el cliente, ya que por mis otros filtros que cambia la cookie, se cambia. debe ser (color=azul; Path=/api/productos;)
         filters:
+          - name: CircuitBreaker #para aplicar circuitbreaker desde apigateway. 
+            args:
+              name: productos
+              statusCodes: 500
+              fallbackUri: forward:/api/items/ver/9/cantidad/5 #para manjeras a un camino alternativo cuando falle productos
           - StripPrefix=2 #Segemtnos por los que está creado la ruta api(1) productos (2)
           - EjemploCookie= Hola mi mensaje perosnalizado, usuario, GerardoCOpalcua # manera (2) Y si lo queremos hacer de esta manera debemo configurar la clase, en vez de la otra forma
           #--------un forma de meter filtros  fmanera(1)---------------------------------------------------------------------------
